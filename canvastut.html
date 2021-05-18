@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<style>
+body{margin:0;}
+
+</style>
+<body>
+    <div>
+    <canvas>
+    
+    </canvas>
+        
+    </div>
+</body>
+</html>
+<script>
+
+var canvas= document.querySelector("canvas");
+canvas.width= window.innerWidth;
+canvas.height= window.innerHeight;
+iw=window.innerWidth;
+ih=window.innerHeight;
+c= canvas.getContext("2d");
+
+mouse={x:undefined,y:undefined};
+colors=["#F3FEB0","#FEA443", "#705E78","#A5AAA3","#812F33"];
+speed=2;
+range=70;
+
+canvas.addEventListener("touchmove",function(e){
+  
+  e.preventDefault();
+  mouse.x=e.touches["0"].clientX;
+  mouse.y=e.touches["0"].clientY;
+  
+  
+  
+  
+}
+);
+
+canvas.addEventListener("click",function(e){
+  
+  e.preventDefault();
+  mouse.x=e.x;
+  mouse.y=e.y;
+  
+  
+  
+  
+}
+);
+canvas.addEventListener("mousemove",function(e){
+  
+  e.preventDefault();
+  mouse.x=e.x;
+  mouse.y=e.y;
+  
+  
+  
+  
+}
+);
+
+function Circle(x,y,dx,dy, radius){
+    this.x=x;
+    this.y=y;
+    this.dx=dx;
+    this.dy=dy;
+    this.radius=radius;
+    this.minrad=this.radius;
+    this.maxrad=range;
+    this.color=colors[Math.floor(Math.random()*5)];
+    
+    
+    
+    this.update= function(){
+if (this.x+this.radius >= iw || this.x-this.radius <=0){
+      this.dx=-(this.dx);
+      
+    };
+if (this.y+this.radius >= ih || this.y-this.radius <= 0 ){
+      this.dy=-(this.dy);
+      
+    };
+    
+    c.beginPath();
+    this.x+=this.dx;
+    this.y+=this.dy;
+    
+ 
+    c.arc(this.x,this.y,this.radius,0,Math.PI*2);
+    c.fillStyle=this.color;
+    c.fill();
+    if(mouse.x -this.x <=range && this.x-mouse.x <=range && mouse.y-this.y <=range && this.y- mouse.y <=range && this.radius < this.maxrad ){
+      this.radius+=speed;
+      
+    }else if(this.radius > this.minrad ){
+      this.radius-=speed;
+      
+    };
+
+
+    };
+    
+    
+
+};
+
+
+
+var circle_ar= []
+for(var i=0 ; i< 800; i++){
+radius=Math.random()*10+2;
+x= Math.random()*(iw-radius*2)+radius;
+
+y=Math.random()*(ih-radius*2)+radius;
+
+dx= (Math.random()-.5)*2;
+dy= (Math.random()-.5)*2;
+
+
+circle_ar.push(new Circle(x,y,dx,dy,radius));
+
+};
+
+
+
+function animate(){
+  requestAnimationFrame(animate);
+c.clearRect(0,0,iw,ih);
+for(var j=0;j< circle_ar.length;j++){
+
+circle_ar[j].update();
+
+};
+ 
+};
+
+animate();
+
+
+</script>
